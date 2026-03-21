@@ -75,6 +75,7 @@ public class Circuit {
 
         Node node = new Node();
         node.setBelongCircuit(this);
+        node.setNodeIndex(this.numberOfNodes);
         this.allNodes[this.numberOfNodes++] = node;
 
         return node;
@@ -87,6 +88,7 @@ public class Circuit {
 
         Node node = new Node(maxComponents);
         node.setBelongCircuit(this);
+        node.setNodeIndex(this.numberOfNodes);
         this.allNodes[this.numberOfNodes++] = node;
 
         return node;

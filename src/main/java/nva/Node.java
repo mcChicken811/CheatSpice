@@ -11,7 +11,10 @@ public class Node {
     private int maxComponents;
     private int numOfComponents;
 
+    /** circuit data */
     private Circuit belongCircuit;
+    /** the index of the node in the circuit, assigned when added to the circuit */
+    private int nodeIndex;
 
     /* for node voltage analysis */
     @Deprecated
@@ -59,6 +62,12 @@ public class Node {
         this.isReferenceNode = false;
 
         this.belongCircuit = null;
+    }
+
+    /** shall only be called when added to the circuit
+     * or when the circuit are forced to change this index */
+    protected void setNodeIndex(int index) {
+        this.nodeIndex = index;
     }
 
     /** shall only be called by the circuit when adding this node in it */

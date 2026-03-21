@@ -6,6 +6,12 @@ public class NodeVoltageAnalyser {
         circuit.completeCircuit();
         circuit.clearAnalysisRecords();
         circuit.updateIndependentCurrentComponents();
+
+        LinearEquation[] linearEquations = new LinearEquation[circuit.getNumberOfNodes() + circuit.getNumberOfIndependentCurrentComponents() + 1];
+
+        /* add linear equations for each independent current component using KVL */
+
+
     }
 
     /** @deprecated this method fucking sucks */
