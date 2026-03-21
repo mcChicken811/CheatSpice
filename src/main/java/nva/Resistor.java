@@ -17,4 +17,9 @@ public class Resistor extends Component {
     public double getResistance() {
         return this.resistance;
     }
+
+    @Override
+    public boolean isIndependentCurrentComp() {
+        return Math.abs(this.resistance) < Resistor.EPSILON;
+    }
 }

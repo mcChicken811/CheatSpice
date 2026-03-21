@@ -7,10 +7,15 @@ public class Component {
     /** analysis records */
     private Double currentThrough;
     private Double voltageAcross;
+    private Integer independentCurrentCompIndex;
 
     protected Component() {
         this.node1 = null;
         this.node2 = null;
+    }
+
+    public boolean isIndependentCurrentComp() {
+        return false;
     }
 
     public Node getNode1() {
@@ -19,6 +24,10 @@ public class Component {
 
     public Node getNode2() {
         return this.node2;
+    }
+
+    protected void setIndependentCurrentCompIndex(int index) {
+        this.independentCurrentCompIndex = index;
     }
 
     protected void setNode1(Node node) {
@@ -33,6 +42,7 @@ public class Component {
     protected void cleanAnalysisRecord() {
         this.currentThrough = null;
         this.voltageAcross = null;
+        this.independentCurrentCompIndex = null;
     }
 
     /** nodeIndex: 1 or 2, meaning to disconnect from node 1 or node 2*/

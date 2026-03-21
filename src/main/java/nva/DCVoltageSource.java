@@ -10,4 +10,9 @@ public class DCVoltageSource extends Component {
     public double getDCVoltage() {
         return this.dcVoltage;
     }
+
+    @Override
+    public boolean isIndependentCurrentComp() {
+        return true;
+    }
 }

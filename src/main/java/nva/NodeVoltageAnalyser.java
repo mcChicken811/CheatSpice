@@ -6,6 +6,14 @@ public class NodeVoltageAnalyser {
         circuit.completeCircuit();
         circuit.clearAnalysisResults();
 
+        int numOfIndependentCurrentComps = 0;
+        Component[] independentCurrentComps = new Component[circuit.getNumberOfComponents()];
+        for (int i = 0; i < circuit.getNumberOfComponents(); i++) {
+            if (circuit.getComponent(i).isIndependentCurrentComp()) {
+                circuit.getComponent(i).setIndependentCurrentCompIndex(numOfIndependentCurrentComps);
+                independentCurrentComps[numOfIndependentCurrentComps++] = circuit.getComponent(i);
+            }
+        }
     }
 
     /** @deprecated this method fucking sucks */
