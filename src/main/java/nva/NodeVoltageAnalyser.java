@@ -4,7 +4,7 @@ public class NodeVoltageAnalyser {
 
     public void analyse(Circuit circuit) {
         circuit.completeCircuit();
-        circuit.clearAnalysisResults();
+        circuit.clearAnalysisRecords();
         circuit.updateIndependentCurrentComponents();
     }
 
