@@ -3,6 +3,7 @@ package nva;
 public class Component {
     private Node node1;
     private Node node2;
+    private Circuit belongCircuit;
 
     /** analysis records */
     private Double currentThrough;
@@ -12,6 +13,16 @@ public class Component {
     protected Component() {
         this.node1 = null;
         this.node2 = null;
+        this.belongCircuit = null;
+    }
+
+    /** shall only be used by Circuit when adding the component in it */
+    protected void setBelongCircuit(Circuit circuit) {
+        this.belongCircuit = circuit;
+    }
+
+    public Circuit getBelongCircuit() {
+        return this.belongCircuit;
     }
 
     public boolean isIndependentCurrentComp() {
@@ -59,10 +70,12 @@ public class Component {
 
     /** connect the node(asNode) of this component to the given node
      * will not do anything if such connection is impossible,
+     * will not do anything if node of other circuit is provided
      * */
     public void connectToNode(Node node, int asNode) {
         if (node == null) return;
         if (asNode != 1 && asNode != 2) return;
+        if (node.getBelongCircuit() != this.belongCircuit) return;
 
         node.connectComponent(this, asNode);
     }

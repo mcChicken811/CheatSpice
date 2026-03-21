@@ -68,6 +68,7 @@ public class Circuit {
         if (this.numberOfNodes >= Circuit.MAX_NODES) return null;
 
         Node node = new Node();
+        node.setBelongCircuit(this);
         this.allNodes[this.numberOfNodes++] = node;
 
         return node;
@@ -79,6 +80,7 @@ public class Circuit {
         if (this.numberOfNodes >= Circuit.MAX_NODES) return null;
 
         Node node = new Node(maxComponents);
+        node.setBelongCircuit(this);
         this.allNodes[this.numberOfNodes++] = node;
 
         return node;
@@ -90,6 +92,7 @@ public class Circuit {
         if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         Resistor res = new Resistor(resistance);
+        res.setBelongCircuit(this);
         this.allComponents[this.numberOfComponents++] = res;
 
         return res;
@@ -99,6 +102,7 @@ public class Circuit {
         if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         DCVoltageSource vsrc = new DCVoltageSource(voltage);
+        vsrc.setBelongCircuit(this);
         this.allComponents[this.numberOfComponents++] = vsrc;
 
         return vsrc;
@@ -108,6 +112,7 @@ public class Circuit {
         if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         Wire wire = new Wire();
+        wire.setBelongCircuit(this);
         this.allComponents[this.numberOfComponents++] = wire;
 
         return wire;

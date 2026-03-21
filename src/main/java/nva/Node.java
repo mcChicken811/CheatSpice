@@ -1,5 +1,7 @@
 package nva;
 
+import java.awt.image.CropImageFilter;
+
 public class Node {
     /** analysis record */
     private Double nodeVoltage;
@@ -8,6 +10,8 @@ public class Node {
     private Component[] components;
     private int maxComponents;
     private int numOfComponents;
+
+    private Circuit belongCircuit;
 
     /* for node voltage analysis */
     @Deprecated
@@ -19,6 +23,10 @@ public class Node {
 
     public int getNumOfComponents() {
         return this.numOfComponents;
+    }
+
+    public Circuit getBelongCircuit() {
+        return this.belongCircuit;
     }
 
     protected boolean isLonelyNode() { return this.numOfComponents <= 1; }
@@ -50,17 +58,25 @@ public class Node {
         this.nodeVoltage = null;
         this.isReferenceNode = false;
 
+        this.belongCircuit = null;
+    }
+
+    /** shall only be called by the circuit when adding this node in it */
+    protected void setBelongCircuit(Circuit circuit) {
+        this.belongCircuit = circuit;
     }
 
     /** connect the given component to this node as its node(asNode) (1 or 2)
      * will not add component if nothing is passed (null is passed)
      * will not add component if the node already hold its maximum number of components
      * will not add component if the node to be connected as is not 1 or 2
-     * will not add component if the node to be connected is already connected to some other node */
+     * will not add component if the node to be connected is already connected to some other node
+     * will not add component if it belongs to other circuit */
     public void connectComponent(Component component, int asNode) {
         if (component == null) return;
         if (this.numOfComponents >= this.maxComponents) return;
         if (asNode != 1 && asNode != 2) return;
+        if (this.belongCircuit != component.getBelongCircuit()) return;
 
         if (asNode == 1) {
             if (component.getNode1() != null) return;
@@ -75,9 +91,11 @@ public class Node {
 
     /** disconnect the component from this node if it is connected of course
      * will not do anything if the component is found to be not connected to this node
+     * will not do anything if component of other circuit is provided
      * */
     public void disconnectComponent(Component component) {
         if (component == null) return;
+        if (component.getBelongCircuit() != this.belongCircuit) return;
 
         this.removeComponentFromList(component);
         if (component.getNode1() == this) component.setNode1(null);
