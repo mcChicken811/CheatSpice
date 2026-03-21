@@ -6,6 +6,8 @@ import org.ejml.interfaces.linsol.LinearSolverSparse;
 import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC;
 import org.ejml.sparse.FillReducing;
 
+import javax.sound.sampled.Line;
+
 /** shall only used when running analysis */
 public class LinearEquation {
 
@@ -31,6 +33,47 @@ public class LinearEquation {
 
         this.belongCircuit = circuit;
     }
+
+    /** combine the other linear equation into this one
+     * by adding it on this one.
+     * will only work if they are the equation to describe the same circuit
+     * and has the same dimension
+     *
+     * @param other the other linear equation
+     */
+    protected void combine(LinearEquation other) {
+        if (!this.isSameSource(other)) return;
+
+        for (int i = 0; i < this.data.length; i++) {
+            this.data[i] += other.data[i];
+        }
+    }
+
+    /** multiply the linear equation with a factor
+     *
+     * @param factor the factor to multiply by
+     */
+    protected void factor(double factor) {
+        for (int i = 0; i < this.data.length; i++)
+        {
+            this.data[i] *= factor;
+        }
+    }
+
+    /** whether the two linear equations are the same source:
+     *  they describe the same circuit
+     *  they has the same dimension for both node voltages
+     *  and independent currents
+     *
+     * @param other the other linear equation
+     * @return
+     */
+    protected boolean isSameSource(LinearEquation other) {
+        return this.belongCircuit == other.belongCircuit &&
+                this.numberOfNodeVoltages == other.numberOfNodeVoltages &&
+                this.numberOfIndependentCurrents == other.numberOfIndependentCurrents;
+    }
+
 
     /** add the ith node voltage coefficient by the given value
      * will not do anything for index out of range */
@@ -70,19 +113,18 @@ public class LinearEquation {
             eqs.length == 0) return null;
 
         /* check if the equations belong to the same circuit */
-        Circuit circuitOfEquations = eqs[0].belongCircuit;
-        int dimOfEquations = eqs[0].data.length - 1;
-        for (int i = 0; i < eqs.length; i++) {
-            if (circuitOfEquations != eqs[i].belongCircuit) return null;
-            if (dimOfEquations != eqs[i].data.length - 1) return null;
+        for (int i = 1; i < eqs.length; i++) {
+            if (!eqs[i - 1].isSameSource(eqs[i])) return null;
         }
 
+        int coefficientCount = eqs[0].numberOfNodeVoltages + eqs[0].numberOfIndependentCurrents;
+
         DMatrixSparseCSC matrix = new DMatrixSparseCSC(eqs.length,
-                dimOfEquations, capacityModifier * dimOfEquations);
+                coefficientCount, capacityModifier * coefficientCount);
 
         /* log the coefficients into the matrix */
         for (int row = 0; row < eqs.length; row++) {
-            for (int col = 0; col < dimOfEquations; col++) {
+            for (int col = 0; col < coefficientCount; col++) {
                 matrix.set(row, col, eqs[row].data[col]);
             }
         }
@@ -110,18 +152,17 @@ public class LinearEquation {
                 eqs.length == 0) return null;
 
         /* check if the equations belong to the same circuit */
-        Circuit circuitOfEquations = eqs[0].belongCircuit;
-        int dimOfEquations = eqs[0].data.length - 1;
-        for (int i = 0; i < eqs.length; i++) {
-            if (circuitOfEquations != eqs[i].belongCircuit) return null;
-            if (dimOfEquations != eqs[i].data.length - 1) return null;
+        for (int i = 1; i < eqs.length; i++) {
+            if (!eqs[i - 1].isSameSource(eqs[i])) return null;
         }
+
+        int coefficientCount = eqs[0].numberOfNodeVoltages + eqs[0].numberOfIndependentCurrents;
 
         DMatrixRMaj matrix = new DMatrixRMaj(eqs.length, 1);
 
         /* log data into this column matrix */
         for (int i = 0; i < eqs.length; i++) {
-            matrix.set(i, 0, eqs[i].data[dimOfEquations]);
+            matrix.set(i, 0, eqs[i].data[coefficientCount]);
         }
 
         return matrix;
