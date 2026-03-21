@@ -62,6 +62,12 @@ public class Circuit {
         return this.numberOfComponents;
     }
 
+    /** return 0 if indpendent current component list is not initialized */
+    protected int getNumberOfIndependentCurrentComponents() {
+        if (!this.isIndepentCurrentComponentProvided()) return 0;
+        return this.numberOfIndependentCurrentComponents;
+    }
+
     /** add a node to the circuit
      * if there is any data space left */
     public Node addNode() {
@@ -170,6 +176,10 @@ public class Circuit {
                 this.independentCurrentComponents[this.numberOfIndependentCurrentComponents++] = this.getComponent(i);
             }
         }
+    }
+
+    protected boolean isIndepentCurrentComponentProvided() {
+        return this.independentCurrentComponents != null;
     }
 
 }
