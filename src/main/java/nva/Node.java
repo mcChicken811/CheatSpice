@@ -55,6 +55,7 @@ public class Node {
      * for example, less than or equal to 0 */
     protected Node(int maxComponents) {
         if (maxComponents <= 0) this.maxComponents = Node.DEFAULT_MAX_COMPONENTS;
+        else this.maxComponents = maxComponents;
         this.components = new Component[this.maxComponents];
         this.numOfComponents = 0;
 
@@ -68,6 +69,10 @@ public class Node {
      * or when the circuit are forced to change this index */
     protected void setNodeIndex(int index) {
         this.nodeIndex = index;
+    }
+
+    public int getNodeIndex() {
+        return this.nodeIndex;
     }
 
     /** shall only be called by the circuit when adding this node in it */
@@ -141,6 +146,10 @@ public class Node {
 
     public Double getNodeVoltage() {
         return this.nodeVoltage;
+    }
+
+    protected void setNodeVoltage(double voltage) {
+        this.nodeVoltage = voltage;
     }
 
     public boolean isReferenceNode() {

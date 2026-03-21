@@ -6,7 +6,9 @@ public class Component {
     private Circuit belongCircuit;
 
     /** analysis records */
+    /** by PSC convention */
     private Double currentThrough;
+    /** reference polarity is positive at node1 and negative at node2 */
     private Double voltageAcross;
     private Integer independentCurrentCompIndex;
 
@@ -16,9 +18,60 @@ public class Component {
         this.belongCircuit = null;
     }
 
+    @Override
+    public String toString() {
+        if (this.voltageAcross == null || this.currentThrough == null)
+            return "Generic Component: (N/A)";
+
+        return String.format("Generic Component: (Voltage: %.2f, Current: %.2f)",
+                this.voltageAcross, this.currentThrough);
+    }
+
+    /** use this template to override toString() of each component */
+    public String toString(String componentName) {
+        if (this.voltageAcross == null || this.currentThrough == null)
+            return String.format("%s: (N/A)", componentName);
+
+        return String.format("%s: (Voltage: %.2f, Current: %.2f)",
+                componentName,
+                this.voltageAcross, this.currentThrough);
+    }
+
     /** shall only be used by Circuit when adding the component in it */
     protected void setBelongCircuit(Circuit circuit) {
         this.belongCircuit = circuit;
+    }
+
+    protected Integer getIndependentCurrentCompIndex() {
+        return this.independentCurrentCompIndex;
+    }
+
+    protected void updateVoltageAcross() {
+        this.voltageAcross = this.getVoltageByNodeVoltage();
+    }
+
+    /** override this function for each component that are current dependent
+     * to update its current through by its voltage across
+     */
+    protected void updateCurrentThrough() {
+        return;
+    }
+
+    /** shall only be used when logging a solution onto the circuit */
+    protected void setCurrentThrough(double current) {
+        this.currentThrough = current;
+    }
+
+    /** return the direction of reference current direction relative to the node given
+     *
+     * @return returns 1.0 if the PSC reference current direction point away from node
+     * negative otherwise, returns null if the component is not connected to the node provided
+     */
+    public Double getReferenceCurrentDirectionByNode(Node node) {
+        if (node == null ||
+                (this.node1 != node && this.node2 != node)) return null;
+
+        return this.node1 == node ? 1.0 : -1.0;
     }
 
     public Circuit getBelongCircuit() {

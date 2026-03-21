@@ -11,6 +11,22 @@ public class TheveninDevice extends Component {
         this.theveninVoltage = theveninVoltage;
     }
 
+    @Override
+    public String toString() {
+        return super.toString("Thevenin Device");
+    }
+
+    @Override
+    public boolean isIndependentCurrentComp() {
+        return Math.abs(this.theveninResistance) < TheveninDevice.EPSILON;
+    }
+
+    @Override
+    protected void updateCurrentThrough() {
+        if (this.isIndependentCurrentComp()) return;
+        this.setCurrentThrough((this.getVoltageByNodeVoltage() - this.theveninVoltage) / this.theveninResistance);
+    }
+
     public double getTheveninResistance() {
         return this.theveninResistance;
     }

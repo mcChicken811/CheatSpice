@@ -10,4 +10,9 @@ public class Wire extends Resistor {
     public boolean isIndependentCurrentComp() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return super.toString("Wire");
+    }
 }

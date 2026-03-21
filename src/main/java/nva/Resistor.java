@@ -10,8 +10,13 @@ public class Resistor extends Component {
     protected Resistor(double resistance) {
         if (Math.abs(Math.signum(resistance) - 1.0) < Resistor.EPSILON &&
             Math.abs(resistance) > Resistor.EPSILON)
-            this.resistance = Resistor.DEFAULT_RESISTANCE;
-        else this.resistance = resistance;
+            this.resistance = resistance;
+        else this.resistance = Resistor.DEFAULT_RESISTANCE;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Resistor");
     }
 
     public double getResistance() {
@@ -21,5 +26,11 @@ public class Resistor extends Component {
     @Override
     public boolean isIndependentCurrentComp() {
         return Math.abs(this.resistance) < Resistor.EPSILON;
+    }
+
+    @Override
+    protected void updateCurrentThrough() {
+        if (this.isIndependentCurrentComp()) return;
+        this.setCurrentThrough(this.getVoltageByNodeVoltage() / this.resistance);
     }
 }

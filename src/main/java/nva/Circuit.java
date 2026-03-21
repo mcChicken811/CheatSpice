@@ -24,6 +24,19 @@ public class Circuit {
         this.numberOfNodes = 0;
     }
 
+    @Override
+    public String toString() {
+        String circuitDescription = "Components:\n";
+
+        for (int i = 0; i < this.numberOfComponents; i++) {
+            circuitDescription += "    ";
+            circuitDescription += this.getComponent(i).toString();
+            circuitDescription += "\n";
+        }
+
+        return circuitDescription;
+    }
+
     /** return null if no component is in the circuit */
     public Component getNewestComponent() {
         if (this.numberOfComponents == 0) return null;
@@ -44,6 +57,18 @@ public class Circuit {
         if (id < 0 || id >= this.numberOfNodes) return null;
 
         return this.allNodes[id];
+    }
+
+    /** return the ith independent current component that is available in the list
+     *
+     * @param id the index of the independent current component
+     * @return returns null when component of such id or the array is unavailable
+     */
+    protected Component getIndependentCurrentComponent(int id) {
+        if (!this.isIndepentCurrentComponentProvided() ||
+                id < 0 || id >= this.numberOfIndependentCurrentComponents) return null;
+
+        return this.independentCurrentComponents[id];
     }
 
     protected Node[] getAllNodes() {

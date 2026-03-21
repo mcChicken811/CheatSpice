@@ -7,6 +7,11 @@ public class DCVoltageSource extends Component {
         this.dcVoltage = dcVoltage;
     }
 
+    @Override
+    public String toString() {
+        return super.toString("DC Voltage Sourece");
+    }
+
     public double getDCVoltage() {
         return this.dcVoltage;
     }
