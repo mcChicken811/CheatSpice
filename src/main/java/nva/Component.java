@@ -5,6 +5,7 @@ public class Component {
     private Node node2;
 
     private Double currentThrough;
+    private Double voltageAcross;
 
     protected Component() {
         this.node1 = null;
@@ -49,11 +50,11 @@ public class Component {
         node.connectComponent(this, asNode);
     }
 
-    public Double getVoltage() {
+    public Double getVoltageByNodeVoltage() {
         if (this.node1 == null ||
             this.node2 == null ||
             this.node1.getNodeVoltage() == null ||
-            this.node2.getNodeVoltage() == null) return null;
+            this.node2.getNodeVoltage() == null) return 0.0;
 
         return this.node1.getNodeVoltage() - this.node2.getNodeVoltage();
     }

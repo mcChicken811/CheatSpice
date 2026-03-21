@@ -60,50 +60,79 @@ public class Circuit {
 
     /** add a node to the circuit
      * if there is any data space left */
-    public void addNode() {
-        if (this.numberOfNodes >= Circuit.MAX_NODES) return;
+    public Node addNode() {
+        if (this.numberOfNodes >= Circuit.MAX_NODES) return null;
 
         Node node = new Node();
         this.allNodes[this.numberOfNodes++] = node;
+
+        return node;
     }
 
     /** add a node to the circuit that is able to take max number of components of maxComponents
      * if there is any data space left */
-    public void addNode(int maxComponents) {
-        if (this.numberOfNodes >= Circuit.MAX_NODES) return;
+    public Node addNode(int maxComponents) {
+        if (this.numberOfNodes >= Circuit.MAX_NODES) return null;
 
         Node node = new Node(maxComponents);
         this.allNodes[this.numberOfNodes++] = node;
+
+        return node;
     }
 
     /** add a component to the circuit
      * if there is any data space left */
-    public void addResistor(double resistance) {
-        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return;
+    public Resistor addResistor(double resistance) {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         Resistor res = new Resistor(resistance);
         this.allComponents[this.numberOfComponents++] = res;
+
+        return res;
     }
 
-    public void addDCVoltageSource(double voltage) {
-        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return;
+    public DCVoltageSource addDCVoltageSource(double voltage) {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         DCVoltageSource vsrc = new DCVoltageSource(voltage);
         this.allComponents[this.numberOfComponents++] = vsrc;
+
+        return vsrc;
     }
 
-    public void addWire() {
-        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return;
+    public Wire addWire() {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         Wire wire = new Wire();
         this.allComponents[this.numberOfComponents++] = wire;
+
+        return wire;
     }
 
-    public void addTheveninDevice(double theveninVoltage, double theveninResistance) {
-        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return;
+    public TheveninDevice addTheveninDevice(double theveninVoltage, double theveninResistance) {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
         TheveninDevice theveninDevice = new TheveninDevice(theveninVoltage, theveninResistance);
         this.allComponents[this.numberOfComponents++] = theveninDevice;
+
+        return theveninDevice;
+    }
+
+    /** create nodes at all endpoint of the components that are not connected to any */
+    protected void completeCircuit() {
+        for (int i = 0; i < this.numberOfComponents; i++) {
+            Component component = this.getComponent(i);
+
+            if (component.getNode1() == null) {
+                Node node1 = this.addNode(1);
+                component.connectToNode(node1, 1);
+            }
+
+            if (component.getNode2() == null) {
+                Node node2 = this.addNode(1);
+                component.connectToNode(node2, 2);
+            }
+        }
     }
 
 
