@@ -3,7 +3,9 @@ package nva;
 public class NodeVoltageAnalyser {
 
     public void analyse(Circuit circuit) {
-        
+        circuit.completeCircuit();
+        circuit.clearAnalysisResults();
+
     }
 
     /** @deprecated this method fucking sucks */

@@ -4,6 +4,7 @@ public class Component {
     private Node node1;
     private Node node2;
 
+    /** analysis records */
     private Double currentThrough;
     private Double voltageAcross;
 
@@ -26,6 +27,12 @@ public class Component {
 
     protected void setNode2(Node node) {
         this.node2 = node;
+    }
+
+    /** remove all analysis logged values in the component */
+    protected void cleanAnalysisRecord() {
+        this.currentThrough = null;
+        this.voltageAcross = null;
     }
 
     /** nodeIndex: 1 or 2, meaning to disconnect from node 1 or node 2*/

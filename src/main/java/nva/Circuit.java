@@ -135,5 +135,16 @@ public class Circuit {
         }
     }
 
+    /** remove all node voltage and component voltage, current through values
+     * that were previously logged by analysis */
+    protected void clearAnalysisResults() {
+        for (int i = 0; i < this.getNumberOfNodes(); i++) {
+            this.getNode(i).cleanAnalysisRecord();
+        }
+
+        for (int i = 0; i < this.getNumberOfComponents(); i++) {
+            this.getComponent(i).cleanAnalysisRecord();
+        }
+    }
 
 }

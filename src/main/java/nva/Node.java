@@ -1,8 +1,10 @@
 package nva;
 
 public class Node {
+    /** analysis record */
     private Double nodeVoltage;
     private boolean isReferenceNode;
+
     private Component[] components;
     private int maxComponents;
     private int numOfComponents;
@@ -25,6 +27,12 @@ public class Node {
 
     protected boolean isConnectedBranchesAtMaximumCapacity() {
         return this.numOfBranches >= this.maxComponents;
+    }
+
+    /** remove all records documented by analysis */
+    protected void cleanAnalysisRecord() {
+        this.nodeVoltage = null;
+        this.isReferenceNode = false;
     }
 
     /** make the node with the default maximum components */
