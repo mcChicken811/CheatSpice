@@ -12,6 +12,10 @@ public class Circuit {
     private static final int MAX_COMPONENTS = 10000;
     private static final int MAX_NODES = 10000;
 
+    /** analysis records */
+    private Component[] independentCurrentComponents;
+    private int numberOfIndependentCurrentComponents;
+
     public Circuit() {
         this.allNodes = new Node[Circuit.MAX_NODES];
         this.allComponents = new Component[Circuit.MAX_COMPONENTS];
@@ -144,6 +148,22 @@ public class Circuit {
 
         for (int i = 0; i < this.getNumberOfComponents(); i++) {
             this.getComponent(i).cleanAnalysisRecord();
+        }
+
+        this.independentCurrentComponents = null;
+        this.numberOfIndependentCurrentComponents = 0;
+    }
+
+    /** update the array of all independent current components in the circuit
+     * and log the index into each component */
+    protected void updateIndependentCurrentComponents() {
+        this.numberOfIndependentCurrentComponents = 0;
+        this.independentCurrentComponents = new Component[this.getNumberOfComponents()];
+        for (int i = 0; i < this.getNumberOfComponents(); i++) {
+            if (this.getComponent(i).isIndependentCurrentComp()) {
+                this.getComponent(i).setIndependentCurrentCompIndex(this.numberOfIndependentCurrentComponents);
+                this.independentCurrentComponents[this.numberOfIndependentCurrentComponents++] = this.getComponent(i);
+            }
         }
     }
 
