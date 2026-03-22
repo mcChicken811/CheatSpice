@@ -14,23 +14,9 @@ public class NodeVoltageAnalyser {
 
         /* add linear equations for each independent current component using KVL */
         for (int id = 0; id < circuit.getNumberOfIndependentCurrentComponents(); id++) {
-            LinearEquation eq = new LinearEquation(circuit);
+
             Component comp = circuit.getIndependentCurrentComponent(id);
-
-            int node1Index = comp.getNode1().getNodeIndex();
-            int node2Index = comp.getNode2().getNodeIndex();
-
-            eq.addNodeVoltageCoeff(node1Index, 1.0);
-            eq.addNodeVoltageCoeff(node2Index, -1.0);
-
-            /* equation: v1 - v2 = v */
-            if (comp instanceof DCVoltageSource) {
-                eq.addEqualityValue(((DCVoltageSource) comp).getDCVoltage());
-            } else if (comp instanceof Resistor) {
-                /* zero resistance resistor */
-                eq.addEqualityValue(0.0);
-            }
-
+            LinearEquation eq = comp.getKVLOfIndependentCurrentComponent();
             linearEquations[currentNumberOfLinearEquations++] = eq;
         }
 
@@ -48,17 +34,9 @@ public class NodeVoltageAnalyser {
                     eq.addIndependentCurrentCoeff(comp.getIndependentCurrentCompIndex(),
                             comp.getReferenceCurrentDirectionByNode(node));
                 } else {
-                    if (comp instanceof Resistor) {
-                        Node other = comp.getNode1() == node ? comp.getNode2() : comp.getNode1();
-                        eq.addNodeVoltageCoeff(node.getNodeIndex(), 1.0 / ((Resistor) comp).getResistance());
-                        eq.addNodeVoltageCoeff(other.getNodeIndex(), -1.0 / ((Resistor) comp).getResistance() );
-                    } else if (comp instanceof TheveninDevice) {
-                        Node other = comp.getNode1() == node ? comp.getNode2() : comp.getNode1();
-                        eq.addNodeVoltageCoeff(node.getNodeIndex(), 1.0 / ((TheveninDevice) comp).getTheveninResistance());
-                        eq.addNodeVoltageCoeff(other.getNodeIndex(), -1.0 / ((TheveninDevice) comp).getTheveninResistance());
-                        eq.addEqualityValue(comp.getReferenceCurrentDirectionByNode(node) *
-                                ((TheveninDevice) comp).getTheveninVoltage() / ((TheveninDevice) comp).getTheveninResistance());
-                    }
+                    LinearEquation currentEq = comp.getCurrentLinearEquationCoefficients();
+                    currentEq.factor(comp.getReferenceCurrentDirectionByNode(node));
+                    eq.combine(currentEq);
                 }
             }
 

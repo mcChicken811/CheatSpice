@@ -141,4 +141,35 @@ public class Component {
 
         return this.node1.getNodeVoltage() - this.node2.getNodeVoltage();
     }
+
+    /** for non-independent current sources,...
+     * combine this equation with other current coefficient linear equations
+     * of components connected to the same node, multiply by the current direction
+     * to obtain the full KCL equation
+     *
+     * for constant current components, the current shall be the value of the linear equation
+     *
+     * Override this function for each non-independent current sources
+     *
+     * @return returns a linear equation
+     *      of only coefficients of node voltage and independent currents
+     *      that describe the current through this source from positive to negative node
+     *
+     *      returns null if called by non-independent current source.
+     */
+    protected LinearEquation getCurrentLinearEquationCoefficients() {
+        return null;
+    }
+
+    /** for independent current sources
+     *
+     * override this method for each independent current components
+     *
+     * @return returns the KVL applying on this component.
+     */
+    protected LinearEquation getKVLOfIndependentCurrentComponent() {
+        return null;
+    }
+
+
 }

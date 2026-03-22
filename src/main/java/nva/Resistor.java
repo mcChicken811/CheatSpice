@@ -33,4 +33,36 @@ public class Resistor extends Component {
         if (this.isIndependentCurrentComp()) return;
         this.setCurrentThrough(this.getVoltageByNodeVoltage() / this.resistance);
     }
+
+    /** i = v1/R - v2/R, i in PSC */
+    @Override
+    protected LinearEquation getCurrentLinearEquationCoefficients() {
+        if (this.isIndependentCurrentComp()) return null;
+
+        int nodeIndex1 = this.getNode1().getNodeIndex();
+        int nodeIndex2 = this.getNode2().getNodeIndex();
+
+        LinearEquation eq = new LinearEquation(this.getBelongCircuit());
+
+        eq.addNodeVoltageCoeff(nodeIndex1, 1.0 / this.resistance);
+        eq.addNodeVoltageCoeff(nodeIndex2, -1.0 / this.resistance);
+
+        return eq;
+    }
+
+    /** v1 - v2 = 0, for R = 0 */
+    @Override
+    protected LinearEquation getKVLOfIndependentCurrentComponent() {
+        if (!this.isIndependentCurrentComp()) return null;
+
+        int nodeIndex1 = this.getNode1().getNodeIndex();
+        int nodeIndex2 = this.getNode2().getNodeIndex();
+
+        LinearEquation eq = new LinearEquation(this.getBelongCircuit());
+
+        eq.addNodeVoltageCoeff(nodeIndex1, 1.0);
+        eq.addNodeVoltageCoeff(nodeIndex2, -1.0);
+
+        return eq;
+    }
 }
