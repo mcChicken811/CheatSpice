@@ -141,6 +141,16 @@ public class Circuit {
         return vsrc;
     }
 
+    public DCCurrentSource addDCCurrentSource(double current) {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
+
+        DCCurrentSource csrc = new DCCurrentSource(current);
+        csrc.setBelongCircuit(this);
+        this.allComponents[this.numberOfComponents++] = csrc;
+
+        return csrc;
+    }
+
     public Wire addWire() {
         if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) return null;
 
