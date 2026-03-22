@@ -1,0 +1,15 @@
+How to use CheatSpice v1.0:
+- in the main method (under Program class)
+- create a new circuit object for your circuit
+- for the circuit you wish to compute, label each node, i.e. point of connection between each component, with an index starting from 0
+- use circuit.addNode() to add new node to the circuit
+- for each circuit component, use circuit.add<Component Name>() to add the component, for example: circuit.addResistor()
+- for each component, connect it to the two nodes that it is supposed to be connected to by:
+- accessing the newest added component: circuit.getNewestComponent(),
+- access the node you wish to connect to: circuit.getNode(index)
+- connect component to node: component.connectToNode(node, <1 or 2>)
+- 1 or 2 is polarity of the component you with to connect the node to, 1 is positive and 2 is negative
+- repeat this process for all components
+- run the node voltage analysis of your circuit by creating a node voltage analyser: nva = new NodeVoltageAnalyser()
+- and do nva.analyse()
+- check your result by doing System.out.println(circuit.toString())
