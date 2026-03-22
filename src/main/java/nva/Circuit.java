@@ -168,6 +168,8 @@ public class Circuit {
         DCVoltageControlVoltageSource vcvs = new DCVoltageControlVoltageSource(coeff, pos, neg);
         vcvs.setBelongCircuit(this);
         this.allComponents[this.numberOfComponents++] = vcvs;
+
+        return vcvs;
     }
 
     public Wire addWire() {
