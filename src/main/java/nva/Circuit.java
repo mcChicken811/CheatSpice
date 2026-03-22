@@ -51,10 +51,16 @@ public class Circuit {
         return this.allComponents[id];
     }
 
-    /** the id of a node is its index in a circuit
-    * returns null if index out of range */
+    /** returns the node in the circuit of the given id
+     *
+     * @param id the id of the node in the circuit
+     * @return the node
+     */
     public Node getNode(int id) {
-        if (id < 0 || id >= this.numberOfNodes) return null;
+        if (id < 0 || id >= this.numberOfNodes) throw new IndexOutOfBoundsException(
+            String.format("Cannot access node of id: %d, in the circuit as it is not" +
+                    "in the circuit", id)
+        );
 
         return this.allNodes[id];
     }
@@ -149,6 +155,19 @@ public class Circuit {
         this.allComponents[this.numberOfComponents++] = csrc;
 
         return csrc;
+    }
+
+    public DCVoltageControlVoltageSource addDCVCVS(double coeff, int posNodeID, int negNodeID) {
+        if (this.numberOfComponents >= Circuit.MAX_COMPONENTS) throw new RuntimeException(
+                "Cannot add more components to the circuit, maximum number of components had been reached"
+        );
+
+        Node pos = this.getNode(posNodeID);
+        Node neg = this.getNode(negNodeID);
+
+        DCVoltageControlVoltageSource vcvs = new DCVoltageControlVoltageSource(coeff, pos, neg);
+        vcvs.setBelongCircuit(this);
+        this.allComponents[this.numberOfComponents++] = vcvs;
     }
 
     public Wire addWire() {
