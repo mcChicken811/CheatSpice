@@ -5,33 +5,35 @@ public class Program {
         /* setting up the circuit */
         Circuit circuit = new Circuit();
 
-        for (int i = 0; i < 4; i++) {
-            circuit.addNode();
-        }
+        Node n0 = circuit.addNode();
+        Node n1 = circuit.addNode();
+        Node n2 = circuit.addNode();
+        Node n3 = circuit.addNode();
 
-        circuit.addResistor(6.0);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(0), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(3), 2);
+        Resistor r1 = circuit.addResistor(10);
+        r1.connectTo(n1, n0);
 
-        circuit.addResistor(12.0);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(0), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(1), 2);
+        Resistor r2 = circuit.addResistor(5);
+        r2.connectTo(n0, n3);
 
-        circuit.addResistor(12.0);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(3), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(2), 2);
+        Resistor r3 = circuit.addResistor(15);
+        r3.connectTo(n0, n2);
 
-        circuit.addResistor(6.0);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(1), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(2), 2);
+        Resistor r4 = circuit.addResistor(10);
+        r4.connectTo(n2, n1);
 
-        circuit.addDCVoltageSource(20.0);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(0), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(2), 2);
+        Resistor r5 = circuit.addResistor(5);
+        r5.connectTo(n1, n3);
 
-        circuit.addWire();
-        circuit.getNewestComponent().connectToNode(circuit.getNode(3), 1);
-        circuit.getNewestComponent().connectToNode(circuit.getNode(1), 2);
+        DCCurrentSource c1 = circuit.addDCCurrentSource(1);
+        c1.connectTo(n3, n0);
+
+        DCCurrentSource c2 = circuit.addDCCurrentSource(0);
+        c2.connectTo(n3, n1);
+
+        DCVoltageControlVoltageSource v1 = circuit.addDCVCVS(2, 1, 0);
+        v1.connectTo(n2, n3);
+
 
         System.out.println(circuit.toString());
 

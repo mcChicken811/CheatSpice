@@ -133,6 +133,19 @@ public class Component {
         node.connectComponent(this, asNode);
     }
 
+    /** attempt to force the component to connect to positive node
+     * and negative node
+     * @param positiveNode the positive node of the component
+     * @param negativeNode the negative node of the component
+     */
+    public void connectTo(Node positiveNode, Node negativeNode) {
+        if (positiveNode == null || negativeNode == null) return;
+        this.disconnectFromNode(1);
+        this.disconnectFromNode(2);
+        this.connectToNode(positiveNode, 1);
+        this.connectToNode(negativeNode, 2);
+    }
+
     public Double getVoltageByNodeVoltage() {
         if (this.node1 == null ||
             this.node2 == null ||

@@ -23,7 +23,7 @@ public class DCCurrentSource extends Component {
     protected LinearEquation getCurrentLinearEquationCoefficients() {
         LinearEquation eq = new LinearEquation(this.getBelongCircuit());
 
-        eq.addEqualityValue(this.dcCurrent);
+        eq.addEqualityValue(-this.dcCurrent);
 
         return eq;
     }
