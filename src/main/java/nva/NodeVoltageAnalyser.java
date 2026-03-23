@@ -54,8 +54,6 @@ public class NodeVoltageAnalyser {
 
        solution.logSolutionOnCircuit();
 
-       System.out.println(circuit.toString());
-
     }
 
     /** @deprecated this method fucking sucks */

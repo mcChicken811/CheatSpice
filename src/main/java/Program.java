@@ -34,11 +34,9 @@ public class Program {
         DCVoltageControlVoltageSource v1 = circuit.addDCVCVS(2, 1, 0);
         v1.connectTo(n2, n3);
 
+        NodeVoltageAnalyser analyser = new NodeVoltageAnalyser();
+        analyser.analyse(circuit);
 
         System.out.println(circuit.toString());
-
-        NodeVoltageAnalyser analyser = new NodeVoltageAnalyser();
-
-        analyser.analyse(circuit);
     }
 }
